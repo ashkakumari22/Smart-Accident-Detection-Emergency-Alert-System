@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vehicle Safety Monitoring Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css"></head><body>
+<header><h1>Vehicle Safety Monitoring Console</h1>
+ <label>Vehicle ID <input id="veh" value="VEH-001" size="9"></label>
+ <span class="chip" id="cMq">MQTT: …</span><span class="chip" id="cEsp">ESP32/Wokwi: …</span><span class="chip" id="cSim">Sim: …</span><span class="chip" id="clock"></span></header>
+<main>
+<section class="card c8" id="v"><div id="cv"></div>
+ <div id="ov"><b id="imp">NO IMPACT</b><br><small id="ori">Orientation: –</small></div>
+ <div class="ctl"><button onclick="play()">▶ Play</button><button onclick="pause()">⏸ Pause</button><button onclick="resetAll()">⟲ Reset</button><button class="p" onclick="trigger()">💥 Trigger crash</button><button class="w" onclick="nearMiss()">⚠ Sudden brake / swerve</button><button onclick="lowImpact()">Low-impact event</button></div></section>
+<div class="c4 col">
+ <section class="card"><h2>System state</h2><div id="badge">MONITORING</div>
+  <div class="kv"><span>Last sensor update</span><b id="lastUp">–</b></div>
+  <div class="kv"><span>Buzzer</span><b id="bz">OFF</b></div></section>
+ <section class="card"><h2>Accident workflow</h2><div id="cd">--</div>
+  <div class="kv"><span>Accident detected at</span><b id="detT">–</b></div>
+  <div class="kv"><span>Countdown outcome</span><b id="outc">–</b></div>
+  <div class="kv"><span>Sensors at impact</span><b id="snap">–</b></div>
+  <button class="g" onclick="cancelA()">Cancel alert (push button)</button></section></div>
+<section class="card c5"><h2>Live MPU6050 readings</h2>
+ <table class="t"><tr><th></th><th>X</th><th>Y</th><th>Z</th><th>Total</th><th>Threshold</th></tr>
+ <tr><td>Accel (g)</td><td id="ax">–</td><td id="ay">–</td><td id="az">–</td><td id="g">–</td><td><input type="number" id="thG" value="3" step="0.1" min="1"></td></tr>
+ <tr><td>Gyro (°/s)</td><td id="gx">–</td><td id="gy">–</td><td id="gz">–</td><td id="r">–</td><td><input type="number" id="thR" value="300" step="10" min="50"></td></tr></table>
+ <div class="kv"><span>Detection result</span><b id="res">NORMAL</b></div>
+ <div class="kv"><span>Peak (since detection)</span><b id="pk">–</b></div>
+ <div class="kv"><span>Severity score</span><b id="sev">0</b></div></section>
+<section class="card c7"><h2>Live charts</h2><div class="ch"><canvas id="chA"></canvas></div><div class="ch"><canvas id="chG"></canvas></div></section>
+<section class="card c5"><h2>Accident location (browser / device location)</h2>
+ <div class="kv"><span>Latitude</span><b id="glat">–</b></div><div class="kv"><span>Longitude</span><b id="glon">–</b></div>
+ <div class="kv"><span>Fix status</span><b id="gfix">Not requested yet</b></div><div class="kv"><span>Accuracy</span><b id="gacc">–</b></div>
+ <div class="kv"><span>Last update</span><b id="gupd">–</b></div><div class="kv"><span>Maps link</span><a id="glink" target="_blank">–</a></div>
+ <div id="map"></div><small>Location comes from the device running this dashboard and is read when the countdown expires.</small></section>
+<section class="card c7"><h2>Telegram notification</h2>
+ <div class="g2"><input type="password" id="tok" placeholder="Bot token"><input type="text" id="chat" placeholder="Chat id"><input type="text" id="rcpt" placeholder="Recipient name (label)" value="Emergency contact"><button onclick="connectBot()">Connect bot</button></div>
+ <div class="kv"><span>Bot</span><b id="tgbot">Not connected</b></div><div class="kv"><span>Delivery status</span><b id="tgst">–</b></div>
+ <div class="kv"><span>Message time</span><b id="tgts">–</b></div>
+ <small>Message preview</small><pre id="prev">–</pre><button id="retry" onclick="sendTg()" disabled>Retry / resend</button></section>
+<section class="card c12"><h2>Event history <select id="flt" onchange="renderHist()"><option value="all">All events</option><option value="det">Detected accidents</option><option value="can">Cancelled alerts</option><option value="sent">Notifications sent</option></select></h2>
+ <div class="sc"><table class="t"><thead><tr><th>#</th><th>Detected</th><th>Countdown</th><th>Peak</th><th>Outcome</th><th>Telegram</th><th>Location</th></tr></thead><tbody id="hist"></tbody></table></div></section>
+<div hidden><input id="topic" value="MET_project_2026"><input type="range" id="spd" min="30" max="120" value="72"><input type="checkbox" id="fGps"><input type="checkbox" id="fNet"><input type="checkbox" id="virt" checked></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mqtt@5.3.4/dist/mqtt.min.js"></script>
+<script src="config.js"></script><script src="mqtt.js"></script><script src="ui.js"></script><script src="alert.js"></script><script src="charts.js"></script>
+<script src="scene.js"></script><script src="car.js"></script><script src="main.js"></script>
+</body></html>

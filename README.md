@@ -4,7 +4,6 @@ An ESP32-based system that spots a probable road accident from motion data, give
 
 You can't crash a car in a lab, so the whole thing runs as a simulation. The ESP32 circuit and firmware run in the [Wokwi](https://wokwi.com) simulator and talk over MQTT to a browser dashboard with a 3D vehicle simulation, live sensor charts, a map and an event log. The sensor values the firmware analyses come from the 3D crash model, so the detection you see on screen is driven by data and not by a scripted animation.
 
-Mini project for *Microcontroller and Embedded System* (CA Component 2), Department of Robotics & Automation, Symbiosis Institute of Technology, Pune (2024–28).
 
 ## How it works
 
